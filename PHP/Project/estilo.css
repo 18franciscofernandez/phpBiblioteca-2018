@@ -1,0 +1,49 @@
+body{
+  padding: 15;
+}
+#paddGeneral {
+  display: block;
+   padding:20;
+   border-bottom: solid #999;
+}
+.image{
+  max-width: 100px;
+  max-height: 150px;
+}
+.formulario{
+display: inline-block;
+padding: 25
+}
+.inpForm{
+  margin: 15px;
+}
+#butBusc{
+  margin-left: 40xp;
+}
+.Sesion{
+display:block;
+text-align: right;
+}
+#datos .dato1{
+  text-align: right;
+}
+a{
+  text-decoration: none;
+  color: black;
+}
+.Sesion a{
+padding: 15px 20px;
+   background-color:#3f888f;
+   color: white;
+   font-family: arial;
+  transition: 0.3s; 
+}
+a:hover{
+  opacity: 0.6;
+}
+fieldset {
+  padding: 10 300;
+}
+tr{
+  border: solid;
+}
