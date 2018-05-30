@@ -7,15 +7,14 @@
 ?>
 <head>
 	<title>
-		<!DOCTYPE>
 		nombre de usuario
 	</title>
 	<link rel="stylesheet" type="text/css" href="CSS/estilo.css">
 	<script type="text/javascript" src="JS/miscript.js"></script>
-</head><!DOCTYPE>
+</head>
 <body>
 	<div id="encabezado2" class="top">
-		<div class="sesion2"><!DOCTYPE>
+		<div class="sesion2">
  			<a href="./iniciar_sesion.php">Cerrar Sesion</a>
  		</div>
 		<a href="./index.php"><img src="IMG/libros.jpg"></a>
@@ -58,20 +57,3 @@
 	</div>
 </body>
 </html>
-//adsksadkjasdg
-a
-d
-dasf
-dfs
-fdsa
-dsd
-sf
-s
-dfsf
-sd
-sdf
-sdf
-sd
-fsd
-fs
-d
