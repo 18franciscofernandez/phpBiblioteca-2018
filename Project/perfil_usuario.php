@@ -19,24 +19,6 @@
  		</div>
 		<a href="./index.php"><img src="IMG/libros.jpg"></a>
 	</div>
-	ads
-	das
-	das
-	das
-	das
-	sa
-	d
-	sd
-	qwd
-	wq
-	dqw
-	dqw
-	dqw
-	ddqwqqdwdwddw
-	dqwdwqdqwdwqdwq
-	FOSFOOFASOSFAOOFAS
-	FASOFASOFAOSFOASFOAOSFA
-	FOASOFAOSOAOFAS
 	<div id="margenGeneral">
 		<h1 id="fontTitulo">Usuario</h1>
 		<div class="presentacionLibro">
