@@ -13,7 +13,6 @@
 
         // defino el numero 0 para empoezar a paginar multiplicando por la cantidad de resultados por pagina
         $empezar_desde = ($pagina-1) * $resultados_por_pagina;
-
       ?>
 <head>
   <meta charset="utf-8">
@@ -112,5 +111,3 @@
   </div>
 </body>
 </html>
-//asdasdas/das/das/das/das/adasdas
-dsfsadfsadfsd
