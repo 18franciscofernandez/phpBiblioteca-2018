@@ -13,26 +13,13 @@
 
         // defino el numero 0 para empoezar a paginar multiplicando por la cantidad de resultados por pagina
         $empezar_desde = ($pagina-1) * $resultados_por_pagina;
-
-        
+      ?>
 <head>
   <meta charset="utf-8">
   <title>Biblioteca</title>
   <link type="text/css" rel="stylesheet" href="CSS/estilo.css">
   <script type="text/javascript" src="JS/miscript.js"></script>
 </head>
-
-      ?>
-            <?php
-        require_once("conectar.php");
-        $conexion= conectar();
-
-        $resultados_por_pagina = 5;
-
-        // defino el numero 0 para empoezar a paginar multiplicando por la cantidad de resultados por pagina
-        $empezar_desde = ($pagina-1) * $resultados_por_pagina;
-
-      ?>
 <body>
   <div class="top">
     <div class="sesion">
