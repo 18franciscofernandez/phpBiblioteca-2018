@@ -10,7 +10,6 @@
         } else { //Si el GET de HTTP no está seteado, lleva a la primera página
           $pagina = 1;
         }
-
         // defino el numero 0 para empoezar a paginar multiplicando por la cantidad de resultados por pagina
         $empezar_desde = ($pagina-1) * $resultados_por_pagina;
       ?>
