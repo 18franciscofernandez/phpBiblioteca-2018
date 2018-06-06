@@ -15,12 +15,13 @@ class Login{
 			$row=mysqli_fetch_array($dato);
 			$nombre = $row['nombre'];
 			$apellido = $row['apellido'];
+			$email = $row['email'];
 			setcookie("nom", $nombre);
 			setcookie("ap", $apellido);
+			setcookie("email", $email);
             header('Location: index.php');
 		} else {
-			setcookie("errorDatos", $error);
-			$error = "Los datos de inicio de sesión son erróneos. Intente nuevamente.";
+          	echo "<script type=\"text/javascript\">alert(\"Se ha cerrado sesión correctamente.\");</script>";
             header('Location: iniciar_sesion.php');
 		}
 	}

@@ -14,10 +14,9 @@
         // defino el numero 0 para empoezar a paginar multiplicando por la cantidad de resultados por pagina
         $empezar_desde = ($pagina-1) * $resultados_por_pagina;
         session_start();
-        if ($_COOKIE['finsesion'] == "yes") {
-          echo "<script type=\"text/javascript\">alert(\"Se ha cerrado sesión correctamente.\");</script>";
-          setcookie("finsesion", "no");
-
+        /* CHEQUEO SI TENGO SETEADA LA VARIABLE DE SESIÓN PARA MOSTRAR ABAJO LA SECCIÓN INDICADA */
+        if (!(isset($_SESSION['estado']))) {
+          $_SESSION['estado'] = "out";
         }
       ?>
 <head>
@@ -29,10 +28,14 @@
 <body>
 
   <?php
+  /* SI ESTOY LOGUEADO MUESTRO ESTO, SINO LO OTRO */
   if ($_SESSION['estado'] == 'in') { ?>
     <div class="top">
     <div class="sesion">
-      <span id="userDerecha"><a href="perfil_usuario.php">Usuario logueado: <?php echo $_COOKIE['nom']; echo $_COOKIE['ap'] ?></a></span><a href="logout.php">Cerrar sesion</a>
+      <span id="userDerecha">
+        <a href="perfil_usuario.php">Usuario logueado: <?php echo $_COOKIE['nom']; echo $_COOKIE['ap'] ?></a>
+        </span>
+      <a href="logout.php">Cerrar sesion</a>
     </div>
         <div id="encabezado">
          <div class="image">
