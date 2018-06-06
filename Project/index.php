@@ -12,6 +12,11 @@
         }
         // defino el numero 0 para empoezar a paginar multiplicando por la cantidad de resultados por pagina
         $empezar_desde = ($pagina-1) * $resultados_por_pagina;
+        session_start();
+        /* CHEQUEO SI TENGO SETEADA LA VARIABLE DE SESIÓN PARA MOSTRAR ABAJO LA SECCIÓN INDICADA */
+        if (!(isset($_SESSION['estado']))) {
+          $_SESSION['estado'] = "out";
+        }
       ?>
 <head>
   <meta charset="utf-8">
@@ -20,30 +25,51 @@
   <script type="text/javascript" src="JS/miscript.js"></script>
 </head>
 <body>
-  <div class="top">
+
+  <?php
+  /* SI ESTOY LOGUEADO MUESTRO ESTO, SINO LO OTRO */
+  if ($_SESSION['estado'] == 'in') { ?>
+    <div class="top">
     <div class="sesion">
-      <a href="./registro_lector.php">Registrarse</a>
-      <a href="./iniciar_sesion.php">Iniciar sesion</a>
+      <span id="userDerecha">
+        <a href="perfil_usuario.php">Usuario logueado: <?php echo $_COOKIE['nom']; echo $_COOKIE['ap'] ?></a>
+        </span>
+      <a href="logout.php">Cerrar sesion</a>
     </div>
-    <div id="encabezado">
-      <div class="image">
-        <a href="./index.php"><img src="img/libros.jpg"></a>
-      </div>
-      <div class="formulario">
-        <form action="index.php" method="get" >
-          <fieldset>
-            <legend>Refinar Busqueda:</legend>
-            <div class="inpForm">
-              <input placeholder="Titulo" type="text" name="tit"></div>
-            <div class="inpForm">
-              <input placeholder="Autor" type="text" name="autor">
-              <button type="submit" id="butBusc">Buscar</button>
-            </div>
-          </fieldset>
-        </form>
-      </div>
-    </div>
+        <div id="encabezado">
+         <div class="image">
+          <img src="img/libros.jpg">
+        </div>
+    </div>    
   </div>
+  <?php
+  } else { ?>
+      <div class="top">
+        <div class="sesion">
+          <a href="./registro_lector.php">Registrarse</a>
+          <a href="./iniciar_sesion.php">Iniciar sesion</a>
+        </div>
+        <div id="encabezado">
+          <div class="image">
+            <a href="./index.php"><img src="img/libros.jpg"></a>
+          </div>
+          <div class="formulario">
+            <form action="index.php" method="get" >
+              <fieldset>
+                <legend>Refinar Busqueda:</legend>
+                <div class="inpForm">
+                  <input placeholder="Titulo" type="text" name="tit"></div>
+                <div class="inpForm">
+                  <input placeholder="Autor" type="text" name="autor">
+                  <button type="submit" id="butBusc">Buscar</button>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
+  <?php } ?>
+
   <div>
     <div>
       <h3>Catalogo de libros:</h3>

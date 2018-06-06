@@ -52,4 +52,3 @@ function validarInicio(form){
 	return val;
 
 }
-

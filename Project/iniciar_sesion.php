@@ -1,5 +1,15 @@
 <!DOCTYPE>
 <html>
+    <?php
+        include_once('Login.php');
+
+        if (isset($_POST['iniciarSesion'])) {
+            $email = $_POST['usuario'];
+            $password = $_POST['contra'];
+            $object = new Login();
+            $object -> validar($email,$password);
+        }
+    ?>
 <head>
   <title>
     Iniciar sesion - Biblioteca
@@ -8,6 +18,11 @@
   <script type="text/javascript" src="JS/miscript.js"></script>
 </head>
 <body>
+    <?php 
+    if (isset($_COOKIE['errorDatos'])) {
+        echo "<script type=\"text/javascript\">alert(\"Los datos de inicio de sesión son erróneos. Intente nuevamente.\");</script>";  
+    }
+     ?>
     <div id="encabezado2" class="top">
         <div class="sesion2">
             <a href="./registro_lector.php">Registrarse</a>
@@ -17,7 +32,7 @@
     <div id="margenGeneral">
         <h1 id="tituloLibro">Iniciar sesi&oacute;n</h1>
         <div class="inpForm">
-            <form onsubmit="return validarInicio(this)" id="formRegistrarse">
+            <form method="POST" action="iniciar_sesion.php" onsubmit="return validarInicio(this)" id="formRegistrarse">
                 <div>
                     <label>Nombre de usuario:</label>
                 </div>
