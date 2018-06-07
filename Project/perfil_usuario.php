@@ -21,7 +21,7 @@
 <body>
 	<div id="encabezado2" class="top">
 		<div class="sesion2">
- 			<a href="/logout.php">Cerrar Sesion</a>
+ 			<a href="logout.php">Cerrar Sesion</a>
  		</div>
 		<a href="./index.php"><img src="IMG/libros.jpg"></a>
 	</div>

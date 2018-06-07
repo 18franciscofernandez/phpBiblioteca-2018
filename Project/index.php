@@ -71,6 +71,7 @@
           <th>Titulo</th>
           <th>Autor</th>
           <th>Ejemplares</th>
+          <th>Acci&oacute;n</th>
         </tr>
         <?php 
           $consulta="SELECT libros.id AS id_libro, libros.titulo, libros.cantidad, autores.id AS id_autor, autores.nombre, autores.apellido FROM libros inner join autores ON autores.id = libros.autores_id WHERE 1=1";
@@ -92,7 +93,6 @@
           $total_paginas = ceil($total_registros / $resultados_por_pagina);
 
           $consulta_resultados = mysqli_query($conexion, $consulta.$filtro.$filtro2." ORDER BY libros.titulo ASC LIMIT $empezar_desde, $resultados_por_pagina");
-
 
 
           while ($row = mysqli_fetch_array($consulta_resultados)) {
@@ -125,6 +125,26 @@
             </td>
             <td>
               <?php echo $row["cantidad"] ?> <?php echo "(".$stringDisponibles.$stringPrestados.$stringReservados.")"; ?>
+            </td>
+            <td>
+                <?php 
+                $consultaMisOperaciones = "SELECT * FROM operaciones WHERE lector_id = '".$_COOKIE['id']."'";
+                $datosOps= mysqli_query($conexion, $consultaMisOperaciones);
+                $reservadosMasPrestados = mysqli_num_rows($datosOps);
+                if ((($row['cantidad']-((mysqli_num_rows($consultaReservados))+(mysqli_num_rows($consultaPrestados)))) > 0) and ($reservadosMasPrestados < 3) ) {
+                ?>
+                    <form action="reservar.php" method="POST">
+                        <input type="hidden" name="user_email" value="<?php echo $_COOKIE['email']; ?>">
+                        <input type="hidden" name="libro_id" value="<?php echo $row['id_libro']; ?>">
+                        <div id="botonRegistro">
+                            <input onclick="return confirm('¿Estas seguro que deseas reservar el libro?')" type="submit" name="Reservar" value="Reservar">
+                        </div>
+                    </form>
+                <?php } elseif ($reservadosMasPrestados = 3) {
+                ?>
+                L&iacute;mite de operaciones alcanzado.
+                <?php } 
+                ?>
             </td>
             </tr>
             <?php } ?>  

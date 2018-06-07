@@ -42,9 +42,11 @@ class Login{
 			$nombre = $row['nombre'];
 			$apellido = $row['apellido'];
 			$email = $row['email'];
+			$id = $row['id'];
 			setcookie("nom", $nombre);
 			setcookie("ap", $apellido);
 			setcookie("email", $email);
+			setcookie("id", $id);
             header('Location: index.php');
 		}
 	}
