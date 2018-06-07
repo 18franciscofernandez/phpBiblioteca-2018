@@ -27,22 +27,115 @@
 <body>
 
   <?php
-  /* SI ESTOY LOGUEADO MUESTRO ESTO, SINO LO OTRO */
+/* +
+    +
+     + --------- INDEX DE USUARIO LOGUEADO ------------- */
+
+
   if ($_SESSION['estado'] == 'in') { ?>
     <div class="top">
     <div class="sesion">
       <span id="userDerecha">
-        <a href="perfil_usuario.php">Usuario logueado: <?php echo $_COOKIE['nom']; echo $_COOKIE['ap'] ?></a>
+        <a href="perfil_usuario.php">Usuario logueado: <?php echo $_COOKIE['nom']; ?> <?php echo $_COOKIE['ap'] ?></a>
         </span>
       <a href="logout.php">Cerrar sesion</a>
     </div>
         <div id="encabezado">
-         <div class="image">
-          <img src="img/libros.jpg">
-        </div>
-    </div>    
-  </div>
+            <div class="image">
+                <a href="./index.php"><img src="img/libros.jpg"></a>
+            </div>
+          <div class="formulario">
+            <form action="index.php" method="get" >
+              <fieldset>
+                <legend>Refinar Busqueda:</legend>
+                <div class="inpForm">
+                  <input placeholder="Titulo" type="text" name="tit"></div>
+                <div class="inpForm">
+                  <input placeholder="Autor" type="text" name="autor">
+                  <button type="submit" id="butBusc">Buscar</button>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </div>    
+    </div>
+  <div>
+    <div>
+      <h3>Catalogo de libros:</h3>
+    </div>
+    <div id="recuadroTabla">
+      <table class="tabla">
+        <tr>
+          <th>Portada</th>
+          <th>Titulo</th>
+          <th>Autor</th>
+          <th>Ejemplares</th>
+        </tr>
+        <?php 
+          $consulta="SELECT libros.id AS id_libro, libros.titulo, libros.cantidad, autores.id AS id_autor, autores.nombre, autores.apellido FROM libros inner join autores ON autores.id = libros.autores_id WHERE 1=1";
+          $filtro="";
+          if (!empty($_GET['tit'])) {
+            $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
+          }
+          $filtro2="";
+          if (!empty($_GET['autor'])) {
+            $filtro2=" or autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
+          } 
+          /* el espacio antes del and es para que no se pegue la consulta */
+          $dato=mysqli_query($conexion, $consulta.$filtro.$filtro2);
+          /* en la variable $dato tengo el vector con la consulta y el filtro ingresado */
+
+          // PARA LA PAGINACION AHORA SACO EL NUMERO DE REGISTROS QUE ME TRAJE
+          $total_registros = mysqli_num_rows($dato);
+          // Y AHORA SACO EL TOTAL DE PAGINAS EXISTENTES
+          $total_paginas = ceil($total_registros / $resultados_por_pagina);
+
+          $consulta_resultados = mysqli_query($conexion, $consulta.$filtro.$filtro2." ORDER BY libros.titulo ASC LIMIT $empezar_desde, $resultados_por_pagina");
+
+
+
+          while ($row = mysqli_fetch_array($consulta_resultados)) {
+            $operaciones_reservado = "SELECT ultimo_estado FROM operaciones WHERE libros_id = '".$row['id_libro']."' and ultimo_estado = 'RESERVADO'";
+            $operaciones_prestado = "SELECT ultimo_estado FROM operaciones WHERE libros_id = '".$row['id_libro']."' and ultimo_estado = 'PRESTADO'";
+            $consultaReservados = mysqli_query($conexion, $operaciones_reservado);
+            $stringReservados= "";
+            if ((mysqli_num_rows($consultaReservados)) != 0) {
+                $stringReservados= " - ".(mysqli_num_rows($consultaReservados))." reservado/s";
+            }
+            $consultaPrestados = mysqli_query($conexion, $operaciones_prestado);
+            $stringPrestados= "";
+            if ((mysqli_num_rows($consultaPrestados)) != 0) {
+                $stringPrestados= " - ".(mysqli_num_rows($consultaPrestados))." prestado/s";
+            }
+            $stringDisponibles = "";
+            if (($row['cantidad']-((mysqli_num_rows($consultaReservados))+(mysqli_num_rows($consultaPrestados)))) > 0 ) {
+                $stringDisponibles = ($row['cantidad']-((mysqli_num_rows($consultaReservados))+(mysqli_num_rows($consultaPrestados))))." disponible/s";
+            }
+          ?>
+            <tr>
+            <td>
+              <img src="mostrar-imagen.php?idLibro=<?php echo $row['id_libro'];?>">
+            </td>
+            <td>
+              <a href="perfil_libro.php?libroID=<?php echo $row['id_libro'];?>"><?php echo $row['titulo'] ?></a>
+            </td>
+            <td>
+              <a href="perfil_autor.php?autorID=<?php echo $row['id_autor']; ?>"><?php echo $row['apellido'].", ".$row['nombre']; ?></a>
+            </td>
+            <td>
+              <?php echo $row["cantidad"] ?> <?php echo "(".$stringDisponibles.$stringPrestados.$stringReservados.")"; ?>
+            </td>
+            </tr>
+            <?php } ?>  
+      </table>
+    </div>
+    </div>
   <?php
+
+  /* +
+    +
+     + --------- INDEX DE USUARIO NO REGISTRADO ------------- */
+
   } else { ?>
       <div class="top">
         <div class="sesion">
@@ -50,9 +143,9 @@
           <a href="./iniciar_sesion.php">Iniciar sesion</a>
         </div>
         <div id="encabezado">
-          <div class="image">
-            <a href="./index.php"><img src="img/libros.jpg"></a>
-          </div>
+            <div class="image">
+                <a href="./index.php"><img src="img/libros.jpg"></a>
+            </div>
           <div class="formulario">
             <form action="index.php" method="get" >
               <fieldset>
@@ -68,7 +161,6 @@
           </div>
         </div>
       </div>
-  <?php } ?>
 
   <div>
     <div>
@@ -90,7 +182,7 @@
           }
           $filtro2="";
           if (!empty($_GET['autor'])) {
-            $filtro2=" and autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
+            $filtro2=" or autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
           } 
           /* el espacio antes del and es para que no se pegue la consulta */
           $dato=mysqli_query($conexion, $consulta.$filtro.$filtro2);
@@ -104,6 +196,22 @@
           $consulta_resultados = mysqli_query($conexion, $consulta.$filtro.$filtro2." ORDER BY libros.titulo ASC LIMIT $empezar_desde, $resultados_por_pagina");
 
           while ($row = mysqli_fetch_array($consulta_resultados)) {
+            $operaciones_reservado = "SELECT ultimo_estado FROM operaciones WHERE libros_id = '".$row['id_libro']."' and ultimo_estado = 'RESERVADO'";
+            $operaciones_prestado = "SELECT ultimo_estado FROM operaciones WHERE libros_id = '".$row['id_libro']."' and ultimo_estado = 'PRESTADO'";
+            $consultaReservados = mysqli_query($conexion, $operaciones_reservado);
+            $stringReservados= "";
+            if ((mysqli_num_rows($consultaReservados)) != 0) {
+                $stringReservados= " - ".(mysqli_num_rows($consultaReservados))." reservado/s";
+            }
+            $consultaPrestados = mysqli_query($conexion, $operaciones_prestado);
+            $stringPrestados= "";
+            if ((mysqli_num_rows($consultaPrestados)) != 0) {
+                $stringPrestados= " - ".(mysqli_num_rows($consultaPrestados))." prestado/s";
+            }
+            $stringDisponibles = "";
+            if (($row['cantidad']-((mysqli_num_rows($consultaReservados))+(mysqli_num_rows($consultaPrestados)))) > 0 ) {
+                $stringDisponibles = ($row['cantidad']-((mysqli_num_rows($consultaReservados))+(mysqli_num_rows($consultaPrestados))))." disponible/s";
+            }
 
           ?>
             <tr>
@@ -117,13 +225,16 @@
               <a href="perfil_autor.php?autorID=<?php echo $row['id_autor']; ?>"><?php echo $row['apellido'].", ".$row['nombre']; ?></a>
             </td>
             <td>
-              <?php echo $row["cantidad"] ?>
+              <?php echo $row["cantidad"] ?> <?php echo "(".$stringDisponibles.$stringPrestados.$stringReservados.")"; ?>
             </td>
             </tr>
             <?php } ?>  
       </table>
     </div>
     </div>
+  <?php } ?>
+
+
         <div class="paginado">
     <?php 
 
