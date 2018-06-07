@@ -37,14 +37,20 @@ class Login{
 			header('Location: iniciar_sesion.php');
 		}*/
 		if ((mysqli_num_rows($dato)) == 1) {
-			$_SESSION['estado'] = "in";
 			$row=mysqli_fetch_array($dato);
+			if ($row['rol'] == 'LECTOR') {
+				$_SESSION['estado'] = "in";
+			} else {
+				$_SESSION['estado'] = "bibliotecario";
+			}
 			$nombre = $row['nombre'];
 			$apellido = $row['apellido'];
 			$email = $row['email'];
+			$id = $row['id'];
 			setcookie("nom", $nombre);
 			setcookie("ap", $apellido);
 			setcookie("email", $email);
+			setcookie("id", $id);
             header('Location: index.php');
 		}
 	}

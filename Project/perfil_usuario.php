@@ -8,7 +8,7 @@
 	$row = mysqli_fetch_array($usuario);
     session_start();
 
-    $consulta_operaciones = "SELECT operaciones.id, operaciones.ultimo_estado, operaciones.fecha_ultima_modificacion, operaciones.libros_id AS id_libro, libros.titulo, libros.autores_id, autores.id AS id_autor, autores.nombre, autores.apellido FROM operaciones inner join libros ON operaciones.libros_id = libros.id inner join autores ON autores.id = libros.autores_id WHERE operaciones.lector_id = '".$row['id']."' or 1=1 ORDER BY operaciones.fecha_ultima_modificacion";
+    $consulta_operaciones = "SELECT operaciones.id, operaciones.ultimo_estado, operaciones.fecha_ultima_modificacion, operaciones.libros_id AS id_libro, libros.titulo, libros.autores_id, autores.id AS id_autor, autores.nombre, autores.apellido FROM operaciones inner join libros ON operaciones.libros_id = libros.id inner join autores ON autores.id = libros.autores_id WHERE operaciones.lector_id = '".$row['id']."' ORDER BY operaciones.fecha_ultima_modificacion";
     $dato = mysqli_query($conexion, $consulta_operaciones);
 ?>
 <head>
@@ -21,7 +21,7 @@
 <body>
 	<div id="encabezado2" class="top">
 		<div class="sesion2">
- 			<a href="/logout.php">Cerrar Sesion</a>
+ 			<a href="logout.php">Cerrar Sesion</a>
  		</div>
 		<a href="./index.php"><img src="IMG/libros.jpg"></a>
 	</div>
