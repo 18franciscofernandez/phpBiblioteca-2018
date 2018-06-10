@@ -8,6 +8,15 @@
 	$row = mysqli_fetch_array($usuario);
     session_start();
 
+    $resultados_por_pagina = 5;
+    if (isset($_GET["pagina"])){
+    	$pagina = $_GET["pagina"];
+    } else { //Si el GET de HTTP no está seteado, lleva a la primera página
+    	$pagina = 1;
+    }
+    // defino el numero 0 para empoezar a paginar multiplicando por la cantidad de resultados por pagina
+    $empezar_desde = ($pagina-1) * $resultados_por_pagina;
+
     $consulta_operaciones = "SELECT operaciones.id, operaciones.ultimo_estado, operaciones.fecha_ultima_modificacion, operaciones.libros_id AS id_libro, libros.titulo, libros.autores_id, autores.id AS id_autor, autores.nombre, autores.apellido FROM operaciones inner join libros ON operaciones.libros_id = libros.id inner join autores ON autores.id = libros.autores_id WHERE operaciones.lector_id = '".$row['id']."' ORDER BY operaciones.fecha_ultima_modificacion";
     $dato = mysqli_query($conexion, $consulta_operaciones);
 ?>
@@ -51,8 +60,15 @@
 					<th>Estado</th>
 					<th>Fecha</th>
 				</tr>
-				<?php 
-					while ($row_ops = mysqli_fetch_array($dato)) {
+				<?php
+          			// PARA LA PAGINACION AHORA SACO EL NUMERO DE REGISTROS QUE ME TRAJE
+          			$total_registros = mysqli_num_rows($dato);
+          			// Y AHORA SACO EL TOTAL DE PAGINAS EXISTENTES
+          			$total_paginas = ceil($total_registros / $resultados_por_pagina);
+
+          			$consulta_resultados = mysqli_query($conexion, $consulta_operaciones." ASC LIMIT $empezar_desde, $resultados_por_pagina");
+
+					while ($row_ops = mysqli_fetch_array($consulta_resultados)) {
 
 				?>
 				<tr>
@@ -75,12 +91,15 @@
 				<?php } ?>  
 			</table>
 		</div>
-		<div id="buscPag">
-			<a href="#"><< Primer pagina</a>
-			<a href="#">< Pagina Anterior</a>
-			<a href="#">Pagina Siguiente ></a>
-			<a href="#">Ultima Pagina >></a>
-		</div>
+		<div class="paginado">
+    <?php 
+
+    for ($i=1; $i<=$total_paginas; $i++) {
+      echo "<a href='?pagina=".$i."'>".$i."</a> | ";
+    };
+
+    ?>
+    </div>
 	</div>
 </body>
 </html>

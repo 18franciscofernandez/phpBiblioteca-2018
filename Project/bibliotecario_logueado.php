@@ -3,7 +3,17 @@
 <?php
     require_once('conectar.php');
     $conexion=conectar();
-    $consultaGrande = "SELECT libros.id AS id_libro, libros.titulo AS titulo, autores.id AS id_autor, autores.nombre AS autor_nombre, autores.apellido AS autor_apellido, usuarios.nombre AS user_nombre, usuarios.apellido AS user_apellido, operaciones.id AS id_operacion, operaciones.ultimo_estado AS ultimo_estado, operaciones.fecha_ultima_modificacion AS fecha FROM libros inner join operaciones ON libros.id = operaciones.libros_id inner join autores ON libros.autores_id = autores.id inner join usuarios ON operaciones.lector_id = usuarios.id ORDER BY operaciones.fecha_ultima_modificacion DESC";
+
+    $resultados_por_pagina = 5;
+    if (isset($_GET["pagina"])){
+        $pagina = $_GET["pagina"];
+    } else { //Si el GET de HTTP no está seteado, lleva a la primera página
+        $pagina = 1;
+    }
+    // defino el numero 0 para empoezar a paginar multiplicando por la cantidad de resultados por pagina
+    $empezar_desde = ($pagina-1) * $resultados_por_pagina;
+
+    $consultaGrande = "SELECT libros.id AS id_libro, libros.titulo AS titulo, autores.id AS id_autor, autores.nombre AS autor_nombre, autores.apellido AS autor_apellido, usuarios.nombre AS user_nombre, usuarios.apellido AS user_apellido, operaciones.id AS id_operacion, operaciones.ultimo_estado AS ultimo_estado, operaciones.fecha_ultima_modificacion AS fecha FROM libros inner join operaciones ON libros.id = operaciones.libros_id inner join autores ON libros.autores_id = autores.id inner join usuarios ON operaciones.lector_id = usuarios.id WHERE 1=1";
     $datosOperaciones = mysqli_query($conexion, $consultaGrande);
 ?>
 <head>
@@ -39,7 +49,7 @@
             <div class="inpForm">
             	<p id="margFecha">Fecha hasta:</p>
             	<input placeholder="Fecha desde:" type="date" name="fechaHasta">
-            	<button type="button" id="butBusc">Buscar</button>
+            	<button type="submit" id="butBusc">Buscar</button>
             </div>                       
           </fieldset>
         </form>
@@ -61,6 +71,28 @@
           			<th>Acci&oacute;n</th>
         		</tr>
                 <?php
+                    $filtro="";
+                    if (!empty($_GET['tit'])) {
+                        $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
+                    }
+                    $filtro2="";
+                    if (!empty($_GET['autor'])) {
+                        $filtro2=" or autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
+                    }
+                    $filtro3="";
+                    if (!empty($_GET['lector'])) {
+                        $filtro3=" or usuarios.nombre LIKE '%".$_GET['lector']."%' or usuarios.apellido LIKE '%".$_GET['lector']."%'";
+                    }
+                    $filtro4="";
+                    if ((!empty($_GET['fechaDesde'])) & (!empty($_GET['fechaHasta']))) {
+                        $filtro4=" or operaciones.fecha_ultima_modificacion BETWEEN '%".$_GET['fechaDesde']."%' AND '%".$_GET['fechaHasta']."%'";
+                    }
+
+                    $total_registros = mysqli_num_rows($datosOperaciones);
+                    // Y AHORA SACO EL TOTAL DE PAGINAS EXISTENTES
+                    $total_paginas = ceil($total_registros / $resultados_por_pagina);
+
+                    $datosOperaciones = mysqli_query($conexion, $consultaGrande.$filtro.$filtro2.$filtro3.$filtro4." ORDER BY operaciones.fecha_ultima_modificacion ASC LIMIT $empezar_desde, $resultados_por_pagina");
                     while ($row = mysqli_fetch_array($datosOperaciones)) {
                 ?>
         		<tr>
@@ -109,6 +141,15 @@
                 <?php } ?>
             </table>
 		</div>
+        <div class="paginado">
+    <?php 
+
+    for ($i=1; $i<=$total_paginas; $i++) {
+      echo "<a href='?pagina=".$i."'>".$i."</a> | ";
+    };
+
+    ?>
+    </div>
 	</div>
 
 </body>

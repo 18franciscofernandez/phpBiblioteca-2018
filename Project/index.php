@@ -356,11 +356,9 @@
             <?php } ?>  
       </table>
     </div>
-    </div>
+  </div>
   <?php } ?>
-
-
-        <div class="paginado">
+  <div class="paginado">
     <?php 
 
     for ($i=1; $i<=$total_paginas; $i++) {
