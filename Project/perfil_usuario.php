@@ -66,7 +66,7 @@
           			// Y AHORA SACO EL TOTAL DE PAGINAS EXISTENTES
           			$total_paginas = ceil($total_registros / $resultados_por_pagina);
 
-          			$consulta_resultados = mysqli_query($conexion, $consulta_operaciones." ASC LIMIT $empezar_desde, $resultados_por_pagina");
+          			$consulta_resultados = mysqli_query($conexion, $consulta_operaciones." DESC LIMIT $empezar_desde, $resultados_por_pagina");
 
 					while ($row_ops = mysqli_fetch_array($consulta_resultados)) {
 

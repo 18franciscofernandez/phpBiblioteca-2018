@@ -7,7 +7,14 @@
             $email = $_POST['usuario'];
             $password = $_POST['contra'];
             $object = new Login();
-            $object -> validar($email,$password);
+            try {
+                $object -> validar($email,$password);
+                header('Location: index.php');
+                exit();
+            } catch (Exception $e) {
+                $error = 'Datos incorrectos';
+                $error = $e->getMessage();
+            }
         }
     ?>
 <head>

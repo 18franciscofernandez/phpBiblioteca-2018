@@ -92,7 +92,7 @@
                     // Y AHORA SACO EL TOTAL DE PAGINAS EXISTENTES
                     $total_paginas = ceil($total_registros / $resultados_por_pagina);
 
-                    $datosOperaciones = mysqli_query($conexion, $consultaGrande.$filtro.$filtro2.$filtro3.$filtro4." ORDER BY operaciones.fecha_ultima_modificacion ASC LIMIT $empezar_desde, $resultados_por_pagina");
+                    $datosOperaciones = mysqli_query($conexion, $consultaGrande.$filtro.$filtro2.$filtro3.$filtro4." ORDER BY operaciones.fecha_ultima_modificacion DESC LIMIT $empezar_desde, $resultados_por_pagina");
                     while ($row = mysqli_fetch_array($datosOperaciones)) {
                 ?>
         		<tr>

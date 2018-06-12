@@ -127,7 +127,7 @@
             </td>
             <td>
                 <?php 
-                $consultaMisOperaciones = "SELECT * FROM operaciones WHERE lector_id = '".$_COOKIE['id']."'";
+                $consultaMisOperaciones = "SELECT * FROM operaciones WHERE lector_id = '".$_COOKIE['id']."' and ultimo_estado = 'PRESTADO' or ultimo_estado = 'RESERVADO'";
                 $datosOps= mysqli_query($conexion, $consultaMisOperaciones);
                 $reservadosMasPrestados = mysqli_num_rows($datosOps);
                 if ((($row['cantidad']-((mysqli_num_rows($consultaReservados))+(mysqli_num_rows($consultaPrestados)))) > 0) and ($reservadosMasPrestados < 3) ) {

@@ -27,12 +27,24 @@
     $total=mysqli_num_rows($resultAux);
     $total_paginas=ceil($total/$resultados_por_pagina);
     $resultLibro=mysqli_query($conexion,$consultaLibro." LIMIT $empezar_desde, $resultados_por_pagina");
+    session_start();
+        /* CHEQUEO SI TENGO SETEADA LA VARIABLE DE SESIÓN PARA MOSTRAR ABAJO LA SECCIÓN INDICADA */
+        if (!(isset($_SESSION['estado']))) {
+          $_SESSION['estado'] = "out";
+        }
   ?>
 <head>
   <title><?php echo $autor['nombre'].' '.$autor['apellido'] ?> - Biblioteca</title>
   <link type="text/css" rel="stylesheet" href="CSS/estilo.css">
 </head>
 <body>
+
+  <?php
+  /*+
+    +
+    + ------------------ENCABEZADO USUARIO NO REGISTRADO--------------------------------
+  */
+  if ($_SESSION['estado'] == 'out') { ?>
   <div>
     <div id="encabezado2" class="top">
       <div class="sesion2">
@@ -41,6 +53,51 @@
       </div>
       <a href="./index.php"><img src="IMG/libros.jpg"></a>
     </div>
+  <?php
+    /*+
+    +
+    + ------------------ENCABEZADO REGISTRADO--------------------------------
+  */
+
+  } elseif ($_SESSION['estado'] == 'in') {
+    
+  ?>
+    <div class="top">
+    <div class="sesion">
+      <span id="userDerecha">
+        <a href="perfil_usuario.php">Usuario logueado: <?php echo $_COOKIE['nom']; ?> <?php echo $_COOKIE['ap'] ?></a>
+        </span>
+      <a href="logout.php">Cerrar sesion</a>
+    </div>
+        <div id="encabezado">
+            <div class="image">
+                <a href="./index.php"><img src="img/libros.jpg"></a>
+            </div>
+        </div>    
+    </div>
+    <?php
+    /*+
+    +
+    + ------------------ENCABEZADO bibliotecario--------------------------------
+  */
+    } elseif ($_SESSION['estado'] == 'bibliotecario') {
+     ?>
+    <div class="top">
+    <div class="sesion">
+      <span id="userDerecha">
+        <a href="bibliotecario_logueado.php">Bibliotecario logueado: <?php echo $_COOKIE['nom']; ?> <?php echo $_COOKIE['ap'] ?></a>
+        </span>
+      <a href="logout.php">Cerrar sesion</a>
+    </div>
+        <div id="encabezado">
+            <div class="image">
+                <a href="./index.php"><img src="img/libros.jpg"></a>
+            </div>
+        </div>    
+    </div>
+    <?php } ?>
+
+
     <div id="margenGeneral">
       <h1 id="fontTitulo"><?php echo $autor['nombre'].' '.$autor['apellido'] ?></h1>
       <div id="recuadroTabla">        

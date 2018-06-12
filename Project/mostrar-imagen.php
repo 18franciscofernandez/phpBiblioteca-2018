@@ -1,6 +1,6 @@
 <?php 
 
-$id= $_GET['idLibro'];
+$id=$_GET['idLibro'];
 require_once("conectar.php");
 $conexion= conectar();
 
