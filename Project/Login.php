@@ -25,7 +25,7 @@ class Login{
 			setcookie("id", $id);
             header('Location: index.php');
 		} else {
-			throw new Exception("Datos incorrectos");
+			throw new Exception("Datos de inicio de sesion incorrectos.");
 			
 		}
 	}

@@ -12,7 +12,7 @@
 		<div class="sesion2">
  			<a href="./iniciar_sesion.php">Iniciar sesion</a>
  		</div>
-		<a href="./index.php"><img src="IMG/libros.jpg"></a>
+		<a href="./index.php" title="Ir al inicio"><img src="IMG/libros.jpg"></a>
 	</div>
  	<div id="margenGeneral">
 		<h1 id="tituloLibro">Registro de lector</h1>

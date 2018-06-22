@@ -32,7 +32,7 @@
 		<div class="sesion2">
  			<a href="logout.php">Cerrar Sesion</a>
  		</div>
-		<a href="./index.php"><img src="IMG/libros.jpg"></a>
+		<a href="./index.php" title="Ir al inicio"><img src="IMG/libros.jpg"></a>
 	</div>
 	<div id="margenGeneral">
 		<h1 id="fontTitulo">Mi perfil:</h1>

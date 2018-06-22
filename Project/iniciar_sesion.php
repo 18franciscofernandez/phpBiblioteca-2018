@@ -12,8 +12,7 @@
                 header('Location: index.php');
                 exit();
             } catch (Exception $e) {
-                $error = 'Datos incorrectos';
-                $error = $e->getMessage();
+                echo 'Excepcion capturada: ', $e->getMessage(), "\n";
             }
         }
     ?>
@@ -25,16 +24,11 @@
   <script type="text/javascript" src="JS/miscript.js"></script>
 </head>
 <body>
-    <?php 
-    if (isset($_COOKIE['errorDatos'])) {
-        echo "<script type=\"text/javascript\">alert(\"Los datos de inicio de sesión son erróneos. Intente nuevamente.\");</script>";  
-    }
-     ?>
     <div id="encabezado2" class="top">
         <div class="sesion2">
             <a href="./registro_lector.php">Registrarse</a>
         </div>
-        <a href="./index.php"><img src="IMG/libros.jpg"></a>
+        <a href="./index.php" title="Ir al inicio"><img src="IMG/libros.jpg"></a>
     </div>
     <div id="margenGeneral">
         <h1 id="tituloLibro">Iniciar sesi&oacute;n</h1>

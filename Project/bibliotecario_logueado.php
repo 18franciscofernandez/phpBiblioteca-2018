@@ -12,9 +12,7 @@
     }
     // defino el numero 0 para empoezar a paginar multiplicando por la cantidad de resultados por pagina
     $empezar_desde = ($pagina-1) * $resultados_por_pagina;
-
-    $consultaGrande = "SELECT libros.id AS id_libro, libros.titulo AS titulo, autores.id AS id_autor, autores.nombre AS autor_nombre, autores.apellido AS autor_apellido, usuarios.nombre AS user_nombre, usuarios.apellido AS user_apellido, operaciones.id AS id_operacion, operaciones.ultimo_estado AS ultimo_estado, operaciones.fecha_ultima_modificacion AS fecha FROM libros inner join operaciones ON libros.id = operaciones.libros_id inner join autores ON libros.autores_id = autores.id inner join usuarios ON operaciones.lector_id = usuarios.id WHERE 1=1";
-    $datosOperaciones = mysqli_query($conexion, $consultaGrande);
+    session_start();
 ?>
 <head>
 	<title>Usuario: bibliotecario</title>
@@ -28,10 +26,10 @@
 		</div>
         <div id="encabezado">
     	   <div class="image">
-        	<a href="./index.php"><img src="IMG/libros.jpg"></a>
+        	<a href="./index.php" title="Ir al inicio"><img src="IMG/libros.jpg"></a>
       	</div>
       <div class="formulario">
-        <form>
+        <form method="GET" action="bibliotecario_logueado.php">
           <fieldset>
             <legend>Refinar Busqueda:</legend>
             <div class="inpForm">
@@ -44,11 +42,11 @@
             </div>
             <div class="inpForm">
             	<p id="margFecha">Fecha desde:</p>
-            	<input placeholder="Fecha desde:" type="date" name="fechaDesde">
+            	<input type="date" name="fechaDesde">
             </div>
             <div class="inpForm">
             	<p id="margFecha">Fecha hasta:</p>
-            	<input placeholder="Fecha desde:" type="date" name="fechaHasta">
+            	<input type="date" name="fechaHasta">
             	<button type="submit" id="butBusc">Buscar</button>
             </div>                       
           </fieldset>
@@ -71,65 +69,84 @@
           			<th>Acci&oacute;n</th>
         		</tr>
                 <?php
+
+                    $consultaGrande = "SELECT libros.id AS id_libro, libros.titulo AS titulo, autores.id AS id_autor, autores.nombre AS autor_nombre, autores.apellido AS autor_apellido, usuarios.nombre AS user_nombre, usuarios.apellido AS user_apellido, operaciones.id AS id_operacion, operaciones.ultimo_estado AS ultimo_estado, operaciones.fecha_ultima_modificacion AS fecha FROM libros inner join operaciones ON libros.id = operaciones.libros_id inner join autores ON libros.autores_id = autores.id inner join usuarios ON operaciones.lector_id = usuarios.id WHERE 1=1";
                     $filtro="";
-                    if (!empty($_GET['tit'])) {
-                        $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
-                    }
                     $filtro2="";
-                    if (!empty($_GET['autor'])) {
-                        $filtro2=" or autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
-                    }
                     $filtro3="";
-                    if (!empty($_GET['lector'])) {
+                    if ((!empty($_GET['tit'])) and (empty($_GET['autor'])) and (empty($_GET['lector']))) {
+                        $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
+                    } elseif ((!empty($_GET['tit'])) and (!empty($_GET['autor'])) and (empty($_GET['lector']))) {
+                        $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
+                        $filtro2=" or autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
+                    } elseif ((!empty($_GET['tit'])) and (empty($_GET['autor'])) and (!empty($_GET['lector']))) {
+                        $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
+                        $filtro3=" or usuarios.nombre LIKE '%".$_GET['lector']."%' or usuarios.apellido LIKE '%".$_GET['lector']."%'";
+                    } elseif ((empty($_GET['tit'])) and (empty($_GET['autor'])) and (!empty($_GET['lector']))) {
+                        $filtro3=" and usuarios.nombre LIKE '%".$_GET['lector']."%' or usuarios.apellido LIKE '%".$_GET['lector']."%'";
+                    } elseif ((empty($_GET['tit'])) and (!empty($_GET['autor'])) and (!empty($_GET['lector']))) {
+                        $filtro2=" and autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
+                        $filtro3=" or usuarios.nombre LIKE '%".$_GET['lector']."%' or usuarios.apellido LIKE '%".$_GET['lector']."%'";
+                    } elseif ((empty($_GET['tit'])) and (!empty($_GET['autor'])) and (empty($_GET['lector']))) {
+                        $filtro2=" and autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
+                    } elseif ((!empty($_GET['tit'])) and (!empty($_GET['autor'])) and (!empty($_GET['lector']))) {
+                        $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
+                        $filtro2=" or autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
                         $filtro3=" or usuarios.nombre LIKE '%".$_GET['lector']."%' or usuarios.apellido LIKE '%".$_GET['lector']."%'";
                     }
                     $filtro4="";
-                    if ((!empty($_GET['fechaDesde'])) & (!empty($_GET['fechaHasta']))) {
-                        $filtro4=" or operaciones.fecha_ultima_modificacion BETWEEN '%".$_GET['fechaDesde']."%' AND '%".$_GET['fechaHasta']."%'";
+                    if ((!empty($_GET['fechaDesde']))) {
+                        $filtro4=" and operaciones.fecha_ultima_modificacion >= '".$_GET['fechaDesde']."'";
+                    }
+                    $filtro5="";
+                    if ((!empty($_GET['fechaHasta']))) {
+                        $filtro5=" and operaciones.fecha_ultima_modificacion <= '".$_GET['fechaHasta']."'";
                     }
 
+                    $datosOperaciones = mysqli_query($conexion, $consultaGrande.$filtro.$filtro2.$filtro3);
                     $total_registros = mysqli_num_rows($datosOperaciones);
                     // Y AHORA SACO EL TOTAL DE PAGINAS EXISTENTES
                     $total_paginas = ceil($total_registros / $resultados_por_pagina);
 
-                    $datosOperaciones = mysqli_query($conexion, $consultaGrande.$filtro.$filtro2.$filtro3.$filtro4." ORDER BY operaciones.fecha_ultima_modificacion DESC LIMIT $empezar_desde, $resultados_por_pagina");
-                    while ($row = mysqli_fetch_array($datosOperaciones)) {
-                ?>
-        		<tr>
-        			<td>
-        				<a href="perfil_libro.php?libroID=<?php echo $row['id_libro'];?>"><?php echo $row['titulo'] ?></a>
-        			</td>
-        			<td>
-        				<a href="perfil_autor.php?autorID=<?php echo $row['id_autor']; ?>"><?php echo $row['autor_apellido'].", ".$row['autor_nombre']; ?></a>
-        			</td>
-        			<td>
-        				<?php echo $row['user_apellido'].", ".$row['user_nombre']; ?>
-        			</td>
-        			<td>
-        				<span id="estadoLibro"><?php echo $row['ultimo_estado'] ?></span>
-        			</td>
-        			<td>
-        				<p><?php echo $row['fecha'] ?></p>
-        			</td>
-        			<td>
-        				<?php 
-                            if ($row['ultimo_estado'] == 'RESERVADO') {
-                        ?>
-                            <form action="prestar.php" method="POST">
-                                <input type="hidden" name="id_op" value="<?php echo $row['id_operacion']; ?>">
-                                <div id="botonRegistro">
-                                    <input onclick="return confirm('¿Estas seguro que deseas PRESTAR este libro?')" type="submit" name="Prestar" value="Prestar">
-                                </div>
-                            </form>
-                        <?php
-                            } elseif ($row['ultimo_estado'] == 'PRESTADO') {
-                        ?>
-                            <form action="devolver.php" method="POST">
-                                <input type="hidden" name="id_op" value="<?php echo $row['id_operacion']; ?>">
-                                <div id="botonRegistro">
-                                    <input onclick="return confirm('¿Estas seguro que deseas DEVOLVER este libro?')" type="submit" name="Devolver" value="Devolver">
-                                </div>
-                            </form>
+                    $resultados = mysqli_query($conexion, $consultaGrande.$filtro.$filtro2.$filtro3.$filtro4.$filtro5." ORDER BY operaciones.fecha_ultima_modificacion DESC LIMIT $empezar_desde, $resultados_por_pagina");
+                    while ($row = mysqli_fetch_array($resultados)) {
+
+                            ?>
+                    		<tr>
+                    			<td>
+                    				<a href="perfil_libro.php?libroID=<?php echo $row['id_libro'];?>"><?php echo $row['titulo'] ?></a>
+                    			</td>
+                    			<td>
+                    				<a href="perfil_autor.php?autorID=<?php echo $row['id_autor']; ?>"><?php echo $row['autor_apellido'].", ".$row['autor_nombre']; ?></a>
+                    			</td>
+                    			<td>
+                    				<?php echo $row['user_apellido'].", ".$row['user_nombre']; ?>
+                    			</td>
+                    			<td>
+                    				<span id="estadoLibro"><?php echo $row['ultimo_estado'] ?></span>
+                    			</td>
+                    			<td>
+                    				<p><?php echo $row['fecha'] ?></p>
+                    			</td>
+                    			<td>
+                    				<?php 
+                                        if ($row['ultimo_estado'] == 'RESERVADO') {
+                                    ?>
+                                        <form action="prestar.php" method="POST">
+                                            <input type="hidden" name="id_op" value="<?php echo $row['id_operacion']; ?>">
+                                            <div id="botonRegistro">
+                                                <input onclick="return confirm('¿Estas seguro que deseas PRESTAR este libro?')" type="submit" name="Prestar" value="Prestar">
+                                            </div>
+                                        </form>
+                                    <?php
+                                        } elseif ($row['ultimo_estado'] == 'PRESTADO') {
+                                    ?>
+                                        <form action="devolver.php" method="POST">
+                                            <input type="hidden" name="id_op" value="<?php echo $row['id_operacion']; ?>">
+                                            <div id="botonRegistro">
+                                                <input onclick="return confirm('¿Estas seguro que deseas DEVOLVER este libro?')" type="submit" name="Devolver" value="Devolver">
+                                            </div>
+                                        </form>
                         <?php
                             } else {
                         ?>

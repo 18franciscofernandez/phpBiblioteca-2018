@@ -39,7 +39,7 @@
         <a href="./registro_lector.php">Registrarse</a>
         <a href="./iniciar_sesion.php">Iniciar sesion</a>
       </div>
-      <a href="./index.php"><img src="IMG/libros.jpg"></a>
+      <a href="./index.php" title="Ir al inicio"><img src="IMG/libros.jpg"></a>
     </div>
   <?php
     /*+
@@ -59,7 +59,7 @@
     </div>
         <div id="encabezado">
             <div class="image">
-                <a href="./index.php"><img src="img/libros.jpg"></a>
+                <a href="./index.php" title="Ir al inicio"><img src="img/libros.jpg"></a>
             </div>
         </div>    
     </div>
@@ -79,7 +79,7 @@
     </div>
         <div id="encabezado">
             <div class="image">
-                <a href="./index.php"><img src="img/libros.jpg"></a>
+                <a href="./index.php" title="Ir al inicio"><img src="img/libros.jpg"></a>
             </div>
         </div>    
     </div>

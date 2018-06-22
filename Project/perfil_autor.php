@@ -51,7 +51,7 @@
         <a href="./registro_lector.php">Registrarse</a>
         <a href="./iniciar_sesion.php">Iniciar sesion</a>
       </div>
-      <a href="./index.php"><img src="IMG/libros.jpg"></a>
+      <a href="./index.php" title="Ir al inicio"><img src="IMG/libros.jpg"></a>
     </div>
   <?php
     /*+
