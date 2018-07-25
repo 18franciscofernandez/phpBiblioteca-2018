@@ -374,7 +374,13 @@
     <?php 
 
     for ($i=1; $i<=$total_paginas; $i++) {
-      echo "<a href='?pagina=".$i."'>".$i."</a> | ";
+      if ((!empty($_GET['tit'])) and (!empty($_GET['autor']))) {
+        echo "<a href='?pagina=".$i."&tit=".$_GET['tit']."&autor=".$_GET['autor']."'>".$i."</a> | ";
+      } elseif ((empty($_GET['tit'])) and (!empty($_GET['autor']))) {
+        echo "<a href='?pagina=".$i."&autor=".$_GET['autor']."'>".$i."</a> | ";
+      } elseif ((!empty($_GET['tit'])) and (empty($_GET['autor']))) {
+        echo "<a href='?pagina=".$i."&tit=".$_GET['tit']."'>".$i."</a> | ";
+      }
     };
 
     ?>

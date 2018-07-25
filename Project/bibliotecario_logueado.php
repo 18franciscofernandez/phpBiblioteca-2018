@@ -162,7 +162,25 @@
     <?php 
 
     for ($i=1; $i<=$total_paginas; $i++) {
-      echo "<a href='?pagina=".$i."'>".$i."</a> | ";
+        if (!empty($_GET['tit'])) {
+            $t="&tit=".$_GET['tit']."";
+        }else{ $t=""; }
+        if (!empty($_GET['autor'])) {
+            $a="&autor=".$_GET['autor']."";
+        }else{ $a=""; }
+        if (!empty($_GET['lector'])) {
+            $l="&lector=".$_GET['lector']."";
+        }else{ $l=""; }
+        if (!empty($_GET['fechaDesde'])) {
+            $fD="&fechaDesde=".$_GET['fechaDesde']."";
+        }else{ $fD=""; }
+        if (!empty($_GET['fechaHasta'])) {
+            $fH="&fechaHasta=".$_GET['fechaHasta']."";
+        }else{ $fH=""; }
+
+        if ((!empty($_GET['tit']))and(!empty($_GET['autor']))and(!empty($_GET['lector']))and(!empty($_GET['fechaDesde']))and(!empty($_GET['fechaHasta']))) {
+            echo "<a href='?pagina=".$i.$t.$a.$l.$fD.$fH."'>".$i."</a> | ";
+        }
     };
 
     ?>
