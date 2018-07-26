@@ -26,7 +26,7 @@
     $resultAux=mysqli_query($conexion, $consultaLibro);
     $total=mysqli_num_rows($resultAux);
     $total_paginas=ceil($total/$resultados_por_pagina);
-    $resultLibro=mysqli_query($conexion,$consultaLibro." LIMIT $empezar_desde, $resultados_por_pagina");
+    $resultLibro=mysqli_query($conexion,$consultaLibro." ORDER BY libros.titulo ASC LIMIT $empezar_desde, $resultados_por_pagina");
     session_start();
         /* CHEQUEO SI TENGO SETEADA LA VARIABLE DE SESIÓN PARA MOSTRAR ABAJO LA SECCIÓN INDICADA */
         if (!(isset($_SESSION['estado']))) {
