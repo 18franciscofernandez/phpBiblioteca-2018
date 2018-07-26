@@ -74,6 +74,7 @@
                     $filtro="";
                     $filtro2="";
                     $filtro3="";
+                    
                     if ((!empty($_GET['tit'])) and (empty($_GET['autor'])) and (empty($_GET['lector']))) {
                         $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
                     } elseif ((!empty($_GET['tit'])) and (!empty($_GET['autor'])) and (empty($_GET['lector']))) {

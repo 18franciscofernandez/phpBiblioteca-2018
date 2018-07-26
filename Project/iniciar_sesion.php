@@ -47,7 +47,7 @@
                     <input type="password" name="contra" placeholder="Ingrese su contrase&ntilde;a"><span class="error" id="errorContra"></span>
                 </div>
                 <div id="botonRegistro"> 
-                    <a href="perfil_usuario.php"><input type="submit" name="iniciarSesion" value="Iniciar sesi&oacute;n"></a>    
+                    <input type="submit" name="iniciarSesion" value="Iniciar sesi&oacute;n">   
                 </div>  
             </form>    
         </div>
