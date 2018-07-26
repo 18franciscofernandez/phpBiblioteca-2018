@@ -13,6 +13,10 @@
     // defino el numero 0 para empoezar a paginar multiplicando por la cantidad de resultados por pagina
     $empezar_desde = ($pagina-1) * $resultados_por_pagina;
     session_start();
+    if (($_SESSION['estado']=="in") or ($_SESSION['estado'] =="out") or (!isset($_SESSION['estado']))){
+        header('location: index.php');
+        die();
+    }
 ?>
 <head>
 	<title>Usuario: bibliotecario</title>

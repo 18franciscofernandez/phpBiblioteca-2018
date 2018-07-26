@@ -7,6 +7,10 @@
 	$usuario = mysqli_query($conexion, $consulta);
 	$row = mysqli_fetch_array($usuario);
     session_start();
+    if (($_SESSION['estado']=="bibliotecario") or ($_SESSION['estado'] =="out") or (!isset($_SESSION['estado']))){
+        header('location: index.php');
+        die();
+    }
 
     $resultados_por_pagina = 5;
     if (isset($_GET["pagina"])){
