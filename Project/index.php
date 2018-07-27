@@ -76,20 +76,16 @@
           $consulta="SELECT libros.id AS id_libro, libros.titulo, libros.cantidad, autores.id AS id_autor, autores.nombre, autores.apellido FROM libros inner join autores ON autores.id = libros.autores_id WHERE 1=1";
           $filtro="";
           $filtro2="";
-          if ((!empty($_GET['tit'])) and (empty($_GET['autor']))) {
+          if (!empty($_GET['tit'])) {
             $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
-          } else {
-              if ((!empty($_GET['autor'])) and (empty($_GET['tit']))) {
-                  $filtro2=" and autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
-              } elseif ((!empty($_GET['autor'])) and (!empty($_GET['tit']))) {
-                    $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
-                    $filtro2=" or autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
-              }
+          }
+          if (!empty($_GET['autor'])) {
+            $filtro2=" and (autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%')";
           }
           /* el espacio antes del and es para que no se pegue la consulta */
           $dato=mysqli_query($conexion, $consulta.$filtro.$filtro2);
           /* en la variable $dato tengo el vector con la consulta y el filtro ingresado */
-
+          echo $dato;
           // PARA LA PAGINACION AHORA SACO EL NUMERO DE REGISTROS QUE ME TRAJE
           $total_registros = mysqli_num_rows($dato);
           // Y AHORA SACO EL TOTAL DE PAGINAS EXISTENTES
@@ -205,15 +201,11 @@
           $consulta="SELECT libros.id AS id_libro, libros.titulo, libros.cantidad, autores.id AS id_autor, autores.nombre, autores.apellido FROM libros inner join autores ON autores.id = libros.autores_id WHERE 1=1";
           $filtro="";
           $filtro2="";
-          if ((!empty($_GET['tit'])) and (empty($_GET['autor']))) {
+          if (!empty($_GET['tit'])) {
             $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
-          } else {
-              if ((!empty($_GET['autor'])) and (empty($_GET['tit']))) {
-                  $filtro2=" and autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
-              } elseif ((!empty($_GET['autor'])) and (!empty($_GET['tit']))) {
-                    $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
-                    $filtro2=" or autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
-              }
+          }
+          if (!empty($_GET['autor'])) {
+            $filtro2=" and (autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%')";
           }
           /* el espacio antes del and es para que no se pegue la consulta */
           $dato=mysqli_query($conexion, $consulta.$filtro.$filtro2);
@@ -311,20 +303,15 @@
           $consulta="SELECT libros.id AS id_libro, libros.titulo, libros.cantidad, autores.id AS id_autor, autores.nombre, autores.apellido FROM libros inner join autores ON autores.id = libros.autores_id WHERE 1=1";
           $filtro="";
           $filtro2="";
-          if ((!empty($_GET['tit'])) and (empty($_GET['autor']))) {
+          if (!empty($_GET['tit'])) {
             $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
-          } else {
-              if ((!empty($_GET['autor'])) and (empty($_GET['tit']))) {
-                  $filtro2=" and autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
-              } elseif ((!empty($_GET['autor'])) and (!empty($_GET['tit']))) {
-                    $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
-                    $filtro2=" or autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
-              }
+          }
+          if (!empty($_GET['autor'])) {
+            $filtro2=" and (autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%')";
           }
           /* el espacio antes del and es para que no se pegue la consulta */
           $dato=mysqli_query($conexion, $consulta.$filtro.$filtro2);
           /* en la variable $dato tengo el vector con la consulta y el filtro ingresado */
-
           // PARA LA PAGINACION AHORA SACO EL NUMERO DE REGISTROS QUE ME TRAJE
           $total_registros = mysqli_num_rows($dato);
           // Y AHORA SACO EL TOTAL DE PAGINAS EXISTENTES

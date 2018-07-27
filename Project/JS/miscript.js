@@ -20,8 +20,8 @@ function validar(form) {
 	} else {
 		document.getElementById("errorEmail").innerHTML="";
 	}
-	if ((/^.{6,}$/).test(form.clave.value)==false) {
-		document.getElementById("errorClave").innerHTML="La contrase&ntilde;a ingresada posee menos de 6 caracteres.";
+	if ((/[0-9\$@\!#]/.test(form.clave.value) && /[A-Z]/.test(form.clave.value) && /[a-z]/.test(form.clave.value) && form.clave.value.length > 5)==false) {
+		document.getElementById("errorClave").innerHTML="La contrase&ntilde;a ingresada posee menos de 6 caracteres y/o debe poseer al menos un numero y un símbolo.";
 		valor=false;
 	} else {
 		document.getElementById("errorClave").innerHTML="";

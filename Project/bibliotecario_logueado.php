@@ -78,37 +78,26 @@
                     $filtro="";
                     $filtro2="";
                     $filtro3="";
-                    
-                    if ((!empty($_GET['tit'])) and (empty($_GET['autor'])) and (empty($_GET['lector']))) {
-                        $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
-                    } elseif ((!empty($_GET['tit'])) and (!empty($_GET['autor'])) and (empty($_GET['lector']))) {
-                        $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
-                        $filtro2=" or autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
-                    } elseif ((!empty($_GET['tit'])) and (empty($_GET['autor'])) and (!empty($_GET['lector']))) {
-                        $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
-                        $filtro3=" or usuarios.nombre LIKE '%".$_GET['lector']."%' or usuarios.apellido LIKE '%".$_GET['lector']."%'";
-                    } elseif ((empty($_GET['tit'])) and (empty($_GET['autor'])) and (!empty($_GET['lector']))) {
-                        $filtro3=" and usuarios.nombre LIKE '%".$_GET['lector']."%' or usuarios.apellido LIKE '%".$_GET['lector']."%'";
-                    } elseif ((empty($_GET['tit'])) and (!empty($_GET['autor'])) and (!empty($_GET['lector']))) {
-                        $filtro2=" and autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
-                        $filtro3=" or usuarios.nombre LIKE '%".$_GET['lector']."%' or usuarios.apellido LIKE '%".$_GET['lector']."%'";
-                    } elseif ((empty($_GET['tit'])) and (!empty($_GET['autor'])) and (empty($_GET['lector']))) {
-                        $filtro2=" and autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
-                    } elseif ((!empty($_GET['tit'])) and (!empty($_GET['autor'])) and (!empty($_GET['lector']))) {
-                        $filtro=" and libros.titulo LIKE '%".$_GET['tit']."%'";
-                        $filtro2=" or autores.nombre LIKE '%".$_GET['autor']."%' or autores.apellido LIKE '%".$_GET['autor']."%'";
-                        $filtro3=" or usuarios.nombre LIKE '%".$_GET['lector']."%' or usuarios.apellido LIKE '%".$_GET['lector']."%'";
-                    }
                     $filtro4="";
-                    if ((!empty($_GET['fechaDesde']))) {
-                        $filtro4=" and operaciones.fecha_ultima_modificacion >= '".$_GET['fechaDesde']."'";
-                    }
                     $filtro5="";
-                    if ((!empty($_GET['fechaHasta']))) {
-                        $filtro5=" and operaciones.fecha_ultima_modificacion <= '".$_GET['fechaHasta']."'";
+                    
+                    if (!empty($_GET['tit'])) {
+                        $filtro=" AND libros.titulo LIKE '%".$_GET['tit']."%'";
+                    }
+                    if (!empty($_GET['autor'])) {
+                        $filtro2=" AND (autores.nombre LIKE '%".$_GET['autor']."%' OR autores.apellido LIKE '%".$_GET['autor']."%')";
+                    } 
+                    if (!empty($_GET['lector'])) {
+                        $filtro3=" AND (usuarios.nombre LIKE '%".$_GET['lector']."%' OR usuarios.apellido LIKE '%".$_GET['lector']."%')";
+                    }
+                    if (!empty($_GET['fechaDesde'])) {
+                        $filtro4=" AND operaciones.fecha_ultima_modificacion >='".$_GET['fechaDesde']."'";
+                    }
+                    if (!empty($_GET['fechaHasta'])) {
+                        $filtro5=" AND operaciones.fecha_ultima_modificacion <='".$_GET['fechaHasta']."'";
                     }
 
-                    $datosOperaciones = mysqli_query($conexion, $consultaGrande.$filtro.$filtro2.$filtro3);
+                    $datosOperaciones = mysqli_query($conexion, $consultaGrande.$filtro.$filtro2.$filtro3.$filtro4.$filtro5);
                     $total_registros = mysqli_num_rows($datosOperaciones);
                     // Y AHORA SACO EL TOTAL DE PAGINAS EXISTENTES
                     $total_paginas = ceil($total_registros / $resultados_por_pagina);
