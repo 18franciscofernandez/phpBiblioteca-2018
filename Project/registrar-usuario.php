@@ -22,8 +22,14 @@
     		} else if (empty($img)) {
     			echo "Debe ingresar una foto.";
     		} else {
+                $newImage = $_FILES['img']['tmp_name'];
+                $tipo = $_FILES['img']['type'];
+                $openBinary = fopen($newImage, 'r+b');
+                $dato = fread($openBinary, filesize($newImage));
+                fclose($openBinary);
+                $dato = mysql_escape_string($dato);
     			$rol='LECTOR';
-    			$datoSQL = "INSERT INTO usuarios (email,nombre,apellido,foto,clave,rol) VALUES ('$mail','$nombre','$apellido','$img','$clave','$rol')";
+    			$datoSQL = "INSERT INTO usuarios (email,nombre,apellido,foto,clave,rol) VALUES ('$mail','$nombre','$apellido','$dato','$clave','$rol')";
     			if (mysqli_query($conexion,$datoSQL)) { 
                         echo "<script>
                                     alert('El usuario ha sido registrado correctamente!');
